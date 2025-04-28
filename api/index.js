@@ -2,7 +2,6 @@ const puppeteer = require('puppeteer-core');
 const chromium = require('@sparticuz/chromium');
 
 module.exports = async (req, res) => {
-  // --- CORS ---
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -11,7 +10,6 @@ module.exports = async (req, res) => {
     res.status(200).end();
     return;
   }
-  // ------------
 
   if (req.method !== 'POST') {
     res.status(405).send('Only POST allowed');
@@ -36,7 +34,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const targetUrl = 'https://school8attack.free.nf'; // укажи свой реальный адрес
+  const targetUrl = 'http://school8attack.free.nf'; // ЗАМЕНИ НА СВОЙ URL
 
   const browser = await puppeteer.launch({
     args: chromium.args,
