@@ -7,7 +7,18 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const { data } = req.body;
+  let body = '';
+
+  await new Promise((resolve, reject) => {
+    req.on('data', chunk => {
+      body += chunk;
+    });
+    req.on('end', resolve);
+    req.on('error', reject);
+  });
+
+  // Теперь просто считаем body как текст
+  const data = body.trim(); // удаляем лишние пробелы и переводы строк
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
   if (!data) {
@@ -15,7 +26,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const targetUrl = 'https://school8attack.free.nf'; // <-- Укажи свой реальный URL
+  const targetUrl = 'https://school8attack.free.nf'; // укажи свой реальный URL
 
   const browser = await puppeteer.launch({
     args: chromium.args,
