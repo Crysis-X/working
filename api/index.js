@@ -2,6 +2,17 @@ const puppeteer = require('puppeteer-core');
 const chromium = require('@sparticuz/chromium');
 
 module.exports = async (req, res) => {
+  // --- CORS ---
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+  // ------------
+
   if (req.method !== 'POST') {
     res.status(405).send('Only POST allowed');
     return;
@@ -17,8 +28,7 @@ module.exports = async (req, res) => {
     req.on('error', reject);
   });
 
-  // Теперь просто считаем body как текст
-  const data = body.trim(); // удаляем лишние пробелы и переводы строк
+  const data = body.trim();
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
   if (!data) {
@@ -26,7 +36,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const targetUrl = 'https://school8attack.free.nf'; // укажи свой реальный URL
+  const targetUrl = 'https://school8attack.free.nf'; // укажи свой реальный адрес
 
   const browser = await puppeteer.launch({
     args: chromium.args,
